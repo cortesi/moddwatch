@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cortesi/modd/filter"
+	"github.com/cortesi/moddwatch/filter"
 	"github.com/cortesi/termlog"
 	"github.com/rjeczalik/notify"
 )

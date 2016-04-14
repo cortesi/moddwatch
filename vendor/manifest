@@ -1,0 +1,19 @@
+{
+	"version": 0,
+	"dependencies": [
+		{
+			"importpath": "github.com/bmatcuk/doublestar",
+			"repository": "https://github.com/bmatcuk/doublestar",
+			"revision": "ec3b4af762f792cb93bf2518ff9ac408dbdc2b4e",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/rjeczalik/notify",
+			"repository": "https://github.com/rjeczalik/notify",
+			"revision": "5dd6205716539662f8f14ab513552b41eab69d5d",
+			"branch": "master",
+			"notests": true
+		}
+	]
+}

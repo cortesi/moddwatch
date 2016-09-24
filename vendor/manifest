@@ -4,14 +4,16 @@
 		{
 			"importpath": "github.com/bmatcuk/doublestar",
 			"repository": "https://github.com/bmatcuk/doublestar",
-			"revision": "ec3b4af762f792cb93bf2518ff9ac408dbdc2b4e",
+			"vcs": "git",
+			"revision": "dd6a6f0a8cdfaaa88b08cf26cf1bc7d69003ee13",
 			"branch": "master",
 			"notests": true
 		},
 		{
 			"importpath": "github.com/rjeczalik/notify",
 			"repository": "https://github.com/rjeczalik/notify",
-			"revision": "5dd6205716539662f8f14ab513552b41eab69d5d",
+			"vcs": "git",
+			"revision": "7e20c15e6693a7d6ad269a94b70ed68bc4a875a7",
 			"branch": "master",
 			"notests": true
 		}

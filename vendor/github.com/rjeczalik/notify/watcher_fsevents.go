@@ -133,7 +133,7 @@ func (w *watch) Dispatch(ev []FSEvent) {
 			ev[i].Flags, ev[i].Path, i, ev[i].ID, len(ev))
 		if ev[i].Flags&failure != 0 {
 			// TODO(rjeczalik): missing error handling
-			continue
+			panic("unhandled error: " + Event(ev[i].Flags).String())
 		}
 		if !strings.HasPrefix(ev[i].Path, w.path) {
 			continue

@@ -174,7 +174,7 @@ func TestBatch(t *testing.T) {
 			input <- e
 		}
 		ret := batch(time.Millisecond*10, MaxLullWait, tst.exists, input)
-		if !reflect.DeepEqual(ret, tst.expected) {
+		if !reflect.DeepEqual(*ret, tst.expected) {
 			t.Errorf("Test %d: expected\n%#v\ngot\n%#v", i, tst.expected, ret)
 		}
 	}

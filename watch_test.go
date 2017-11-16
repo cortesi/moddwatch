@@ -517,6 +517,10 @@ func _testWatch(
 		time.Millisecond*200,
 		ch,
 	)
+	if err != nil {
+		t.Fatal(err)
+		return
+	}
 	defer watcher.Stop()
 
 	// There's some race condition in rjeczalik/notify. If we don't wait a bit

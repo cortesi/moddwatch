@@ -293,6 +293,12 @@ type Watcher struct {
 	sync.Mutex
 }
 
+func (w *Watcher) send(m *Mod) {
+	w.Lock()
+	defer w.Unlock()
+	w.modch <- m
+}
+
 // Stop watching, and close the channel passed to watch. This function can
 // safely be called concurrently.
 func (w *Watcher) Stop() {
@@ -380,6 +386,7 @@ func Watch(
 			return nil, err
 		}
 	}
+	w := &Watcher{evtch: evtch, modch: ch}
 	go func() {
 		for {
 			b := batch(lullTime, MaxLullWait, statExistenceChecker{}, evtch)
@@ -397,12 +404,12 @@ func Watch(
 					continue
 				}
 				if !b.Empty() {
-					ch <- b
+					w.send(b)
 				}
 			}
 		}
 	}()
-	return &Watcher{evtch: evtch, modch: ch}, nil
+	return w, nil
 }
 
 // List all files under the root that match the specified patterns. The file

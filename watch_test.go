@@ -550,7 +550,7 @@ func _testWatch(
 			break
 		}
 	}
-	t.Error("Never saw expected result")
+	t.Errorf("Never saw expected result, did see\n%s", ret)
 }
 
 func TestWatch(t *testing.T) {

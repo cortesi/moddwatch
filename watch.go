@@ -35,7 +35,7 @@ func normPaths(root string, abspaths []string) ([]string, error) {
 	}
 	ret := make([]string, len(abspaths))
 	for i, p := range abspaths {
-		norm, err := filepath.Abs(filepath.ToSlash(p))
+		norm, err := filepath.Abs(p)
 		if err != nil {
 			return nil, err
 		}
@@ -45,7 +45,7 @@ func normPaths(root string, abspaths []string) ([]string, error) {
 				return nil, err
 			}
 		}
-		ret[i] = norm
+		ret[i] = filepath.ToSlash(norm)
 	}
 	return ret, nil
 }

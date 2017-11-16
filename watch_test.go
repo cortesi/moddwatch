@@ -510,8 +510,13 @@ func _testWatch(
 	touch("a/initial")
 
 	ch := make(chan *Mod, 1024)
+	cwd, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+		return
+	}
 	watcher, err := Watch(
-		".",
+		cwd,
 		includes,
 		excludes,
 		time.Millisecond*200,

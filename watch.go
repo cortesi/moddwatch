@@ -385,7 +385,7 @@ func Watch(
 		err := notify.Watch(filepath.Join(p, "..."), evtch, notify.All)
 		if err != nil {
 			notify.Stop(evtch)
-			return nil, err
+			return nil, fmt.Errorf("could not watch path %s: %s", p, err)
 		}
 	}
 	w := &Watcher{evtch: evtch, modch: ch}

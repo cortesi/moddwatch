@@ -296,7 +296,9 @@ type Watcher struct {
 func (w *Watcher) send(m *Mod) {
 	w.Lock()
 	defer w.Unlock()
-	w.modch <- m
+	if !w.closed {
+		w.modch <- m
+	}
 }
 
 // Stop watching, and close the channel passed to watch. This function can

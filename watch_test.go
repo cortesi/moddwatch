@@ -460,6 +460,18 @@ func TestList(t *testing.T) {
 
 const timeout = 2 * time.Second
 
+func wait(p string) {
+	p = filepath.FromSlash(p)
+	for {
+		_, err := os.Stat(p)
+		if err != nil {
+			continue
+		} else {
+			break
+		}
+	}
+}
+
 func touch(p string) {
 	p = filepath.FromSlash(p)
 	d := filepath.Dir(p)
@@ -468,8 +480,14 @@ func touch(p string) {
 		panic(err)
 	}
 
-	err = ioutil.WriteFile(p, []byte("teststring"), 0777)
+	f, err := os.OpenFile(p, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0777)
 	if err != nil {
+		panic(err)
+	}
+	if _, err := f.Write([]byte("teststring")); err != nil {
+		panic(err)
+	}
+	if err := f.Close(); err != nil {
 		panic(err)
 	}
 	ioutil.ReadFile(p)
@@ -507,8 +525,6 @@ func _testWatch(
 		t.Fatal(err)
 	}
 
-	touch("a/initial")
-
 	ch := make(chan *Mod, 1024)
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -527,15 +543,29 @@ func _testWatch(
 		return
 	}
 	defer watcher.Stop()
-
-	// There's some race condition in rjeczalik/notify. If we don't wait a bit
-	// here, we sometimes receive notifications for the change above even
-	// though we haven't started the watcher.
-	time.Sleep(200 * time.Millisecond)
 	go func() {
-		time.Sleep(1 * time.Second)
+		time.Sleep(2 * time.Second)
 		watcher.Stop()
 	}()
+
+	// There's some race condition in rjeczalik/notify. If we don't wait a bit
+	// here, we sometimes don't receive notifications for the initial event.
+	go func() {
+		touch("a/initial")
+	}()
+	for {
+		evt, more := <-ch
+		if !more {
+			t.Errorf("Never saw initial sync event")
+			return
+		}
+		if cmp.Equal(evt.Added, []string{"a/initial"}) {
+			break
+		} else {
+			t.Errorf("Unexpected initial sync event:\n%#v", evt)
+			return
+		}
+	}
 
 	go modfunc()
 	ret := Mod{}
@@ -567,6 +597,38 @@ func TestWatch(t *testing.T) {
 				[]string{},
 				Mod{
 					Added:   []string{"a/touched"},
+					Changed: []string{"a/initial"},
+				},
+			)
+		},
+	)
+	t.Run(
+		"direct",
+		func(t *testing.T) {
+			_testWatch(
+				t,
+				func() {
+					touch("a/direct")
+				},
+				[]string{"a/initial", "a/direct"},
+				[]string{},
+				Mod{
+					Added: []string{"a/direct"},
+				},
+			)
+		},
+	)
+	t.Run(
+		"directprexisting",
+		func(t *testing.T) {
+			_testWatch(
+				t,
+				func() {
+					touch("a/initial")
+				},
+				[]string{"a/initial"},
+				[]string{},
+				Mod{
 					Changed: []string{"a/initial"},
 				},
 			)

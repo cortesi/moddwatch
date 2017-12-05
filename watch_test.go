@@ -649,4 +649,20 @@ func TestWatch(t *testing.T) {
 			)
 		},
 	)
+	t.Run(
+		"deepdirect",
+		func(t *testing.T) {
+			_testWatch(
+				t,
+				func() {
+					touch("a/deep/directory/direct")
+				},
+				[]string{"a/initial", "a/deep/directory/direct"},
+				[]string{},
+				Mod{
+					Added: []string{"a/deep/directory/direct"},
+				},
+			)
+		},
+	)
 }

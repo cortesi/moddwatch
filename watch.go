@@ -325,20 +325,18 @@ func baseDirs(root string, includePatterns []string) []string {
 		}
 		if stat, err := os.Lstat(bdir); err != nil {
 			continue
-		} else {
+		} else if stat.Mode()&os.ModeSymlink != 0 {
 			// A symlink, so we rebase the include patterns and the base directory
-			if stat.Mode()&os.ModeSymlink != 0 {
-				lnk, err := os.Readlink(bdir)
-				if err != nil {
-					continue
-				}
-				if filepath.IsAbs(lnk) {
-					bdir = lnk
-				} else {
-					bdir = filepath.Join(bdir, lnk)
-				}
-				includePatterns[i] = bdir + "/" + trailer
+			lnk, err := os.Readlink(bdir)
+			if err != nil {
+				continue
 			}
+			if filepath.IsAbs(lnk) {
+				bdir = lnk
+			} else {
+				bdir = filepath.Join(bdir, lnk)
+			}
+			includePatterns[i] = bdir + "/" + trailer
 		}
 		bases[i] = bdir
 	}
@@ -385,7 +383,7 @@ func Watch(
 		err := notify.Watch(filepath.Join(p, "..."), evtch, notify.All)
 		if err != nil {
 			notify.Stop(evtch)
-			return nil, fmt.Errorf("could not watch path %s: %s", p, err)
+			return nil, fmt.Errorf("could not watch path '%s': %s", p, err)
 		}
 	}
 	w := &Watcher{evtch: evtch, modch: ch}

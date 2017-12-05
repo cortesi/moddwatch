@@ -250,6 +250,21 @@ func testListBasic(t *testing.T) {
 			[]string{"a/a.test1", "b/a.test1", "x.test1"},
 		},
 		{
+			[]string{"a"},
+			[]string{},
+			[]string{},
+		},
+		{
+			[]string{"x"},
+			[]string{},
+			[]string{"x"},
+		},
+		{
+			[]string{"a/a.test1"},
+			[]string{},
+			[]string{"a/a.test1"},
+		},
+		{
 			[]string{"**"},
 			[]string{"*.test1"},
 			[]string{"a/a.test1", "a/b.test2", "b/a.test1", "b/b.test2", "x"},

@@ -3,36 +3,48 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:ec1e8d27ef73eb25966952b44c35b5573d591213fe4900471c72a3cd0e28940e"
   name = "github.com/bmatcuk/doublestar"
   packages = ["."]
+  pruneopts = ""
   revision = "54c073d0225fcec2f0865dc8530ff0477fd91615"
 
 [[projects]]
+  digest = "1:9ed055a3aae12576c784609f6894cc05ea64f24c3a4859f1d0052bfea1bdde0e"
   name = "github.com/google/go-cmp"
   packages = [
     "cmp",
     "cmp/internal/diff",
     "cmp/internal/function",
-    "cmp/internal/value"
+    "cmp/internal/value",
   ]
+  pruneopts = ""
   revision = "8099a9787ce5dc5984ed879a3bda47dc730a8e97"
   version = "v0.1.0"
 
 [[projects]]
+  digest = "1:7143292549152d009ca9e9c493b74736a2ebd93f921bea8a4b308d7cc5edc6b3"
   name = "github.com/rjeczalik/notify"
   packages = ["."]
-  revision = "52ae50d8490436622a8941bd70c3dbe0acdd4bbf"
-  version = "v0.9.0"
+  pruneopts = ""
+  revision = "0f065fa99b48b842c3fd3e2c8b194c6f2b69f6b8"
+  version = "v0.9.1"
 
 [[projects]]
   branch = "master"
+  digest = "1:677e38cad6833ad266ec843739d167755eda1e6f2d8af1c63102b0426ad820db"
   name = "golang.org/x/sys"
   packages = ["unix"]
+  pruneopts = ""
   revision = "ac767d655b305d4e9612f5f6e33120b9176c4ad4"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "4242ed586f338d176fa29d8226f650a37aa03e057baf78ed65c4f6a3f251a874"
+  input-imports = [
+    "github.com/bmatcuk/doublestar",
+    "github.com/google/go-cmp/cmp",
+    "github.com/rjeczalik/notify",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1

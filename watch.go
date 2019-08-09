@@ -353,7 +353,11 @@ func baseDirs(root string, includePatterns []string) ([]string, []string) {
 				} else {
 					bdir = filepath.Join(bdir, lnk)
 				}
-				newincludes[i] = bdir + "/" + trailer
+				if trailer != "" {
+					newincludes[i] = bdir + "/" + trailer
+				} else {
+					newincludes[i] = bdir
+				}
 			} else {
 				// Case 2: The file exists and is nota symlink, so we leave bdir
 				// unmodified.

@@ -47,7 +47,8 @@ var cmpOptions = cmp.Options{
 // WithTempDir creates a temp directory, changes the current working directory
 // to it, and returns a function that can be called to clean up. Use it like
 // this:
-//      defer WithTempDir(t)()
+//
+//	defer WithTempDir(t)()
 func WithTempDir(t *testing.T) func() {
 	cwd, err := os.Getwd()
 	if err != nil {

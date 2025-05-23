@@ -2,9 +2,10 @@ package moddwatch
 
 import (
 	"fmt"
+	"maps"
 	"os"
 	"path/filepath"
-	"sort"
+	"slices"
 	"strings"
 	"sync"
 	"time"
@@ -118,13 +119,8 @@ func joinLists(a []string, b []string) []string {
 	for _, v := range b {
 		m[v] = true
 	}
-	ret := make([]string, len(m))
-	i := 0
-	for k := range m {
-		ret[i] = k
-		i++
-	}
-	sort.Strings(ret)
+	ret := slices.Collect(maps.Keys(m))
+	slices.Sort(ret)
 	return ret
 }
 
@@ -172,17 +168,12 @@ func (mod *Mod) normPaths(root string) (*Mod, error) {
 }
 
 func _keys(m map[string]bool) []string {
-	if len(m) > 0 {
-		keys := make([]string, len(m))
-		i := 0
-		for k := range m {
-			keys[i] = k
-			i++
-		}
-		sort.Strings(keys)
-		return keys
+	if len(m) == 0 {
+		return nil
 	}
-	return nil
+	keys := slices.Collect(maps.Keys(m))
+	slices.Sort(keys)
+	return keys
 }
 
 type fset map[string]bool
@@ -460,9 +451,13 @@ func List(root string, includePatterns []string, excludePatterns []string) ([]st
 	newincludes, bases := baseDirs(root, includePatterns)
 	ret := []string{}
 	for _, b := range bases {
-		err := filepath.Walk(
+		err := filepath.WalkDir(
 			b,
-			func(p string, fi os.FileInfo, err error) error {
+			func(p string, d os.DirEntry, err error) error {
+				if err != nil {
+					return nil
+				}
+				fi, err := d.Info()
 				if err != nil || fi.Mode()&os.ModeSymlink != 0 {
 					return nil
 				}
@@ -470,7 +465,7 @@ func List(root string, includePatterns []string, excludePatterns []string) ([]st
 				if err != nil {
 					return nil
 				}
-				if fi.IsDir() {
+				if d.IsDir() {
 					m, err := filter.MatchAny(p, excludePatterns)
 					// We skip the dir only if it's explicitly excluded
 					if err != nil && !m {

@@ -2,7 +2,6 @@ package moddwatch
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/url"
 	"os"
 	"path"
@@ -53,7 +52,7 @@ func WithTempDir(t *testing.T) func() {
 	if err != nil {
 		t.Fatalf("TempDir: %v", err)
 	}
-	tmpdir, err := ioutil.TempDir("", "")
+	tmpdir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatalf("TempDir: %v", err)
 	}
@@ -302,7 +301,7 @@ func testListBasic(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Error creating test dir: %v", err)
 		}
-		err = ioutil.WriteFile(dst, []byte("test"), 0777)
+		err = os.WriteFile(dst, []byte("test"), 0777)
 		if err != nil {
 			t.Fatalf("Error writing test file: %v", err)
 		}
@@ -410,7 +409,7 @@ func testList(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Error creating test dir: %v", err)
 		}
-		err = ioutil.WriteFile(dst, []byte("test"), 0777)
+		err = os.WriteFile(dst, []byte("test"), 0777)
 		if err != nil {
 			t.Fatalf("Error writing test file: %v", err)
 		}
@@ -506,7 +505,7 @@ func touch(p string) {
 	if err := f.Close(); err != nil {
 		panic(err)
 	}
-	ioutil.ReadFile(p)
+	os.ReadFile(p)
 }
 
 func events(p string) []string {
